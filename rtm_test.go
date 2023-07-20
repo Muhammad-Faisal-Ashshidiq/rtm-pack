@@ -34,6 +34,6 @@ func TestUjiGetDatauser(t *testing.T) {
 }
 
 func TestUjiDeleteData(t *testing.T) {
-	Id_user := "Universitas Logistik dan Bisnis Internasional"
-	DeleteDataProfil(Id_user, MongoConn, "data_user")
+	Bio := "Universitas Logistik dan Bisnis Internasional"
+	DeleteDataProfil(Bio, MongoConn, "data_user")
 }

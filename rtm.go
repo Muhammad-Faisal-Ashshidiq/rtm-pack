@@ -46,7 +46,7 @@ func GetDataProfil(pendidikan string, db *mongo.Database, col string) (data Prof
 	return data
 }
 
-func GetDataUsername(username string, db *mongo.Database, col string) (data Profile) {
+func GetDatasa(username string, db *mongo.Database, col string) (data Profile) {
 	user := db.Collection(col)
 	filter := bson.M{"username": username}
 	err := user.FindOne(context.TODO(), filter).Decode(&data)
@@ -56,12 +56,12 @@ func GetDataUsername(username string, db *mongo.Database, col string) (data Prof
 	return data
 }
 
-func DeleteDataProfil(Pendidikan string, db *mongo.Database, col string) {
+func DeleteDataProfil(Id_user string, db *mongo.Database, col string) {
 	user := db.Collection(col)
-	filter := bson.M{"pendidikan": Pendidikan}
+	filter := bson.M{"Id_user": Id_user}
 	_, err := user.DeleteOne(context.TODO(), filter)
 	if err != nil {
-		fmt.Printf("DeleteDataProfile : %v\n", err)
+		fmt.Printf("DeleteDataProf : %v\n", err)
 	}
 	fmt.Println("Succes Delete data Profile")
 }
@@ -77,22 +77,22 @@ func DeleteDataUsername(username string, db *mongo.Database, col string) {
 }
 
 //fungsi untuk meng-generate tanggal_lahir menjadi usia
-func KalkulasiUsia(Tanggal_lahir string) (int, error) {
+func KalkulasiUsia(birthDate string) (int, error) {
 	layout := "02/01/1999" // Format tanggal lahir (hari/bulan/tahun)
-	tglLahir, err := time.Parse(layout, Tanggal_lahir)
+	birth, err := time.Parse(layout, birthDate)
 	if err != nil {
 		return 0, err
 	}
 
 	currentDate := time.Now()
-	usia := currentDate.Year() - tglLahir.Year()
+	age := currentDate.Year() - birth.Year()
 
 	// Pengecekan apabila tanggal tahirnya supaya bisa menyesuaikan tahun user
-	if currentDate.YearDay() < tglLahir.YearDay() {
-		usia--
+	if currentDate.YearDay() < birth.YearDay() {
+		age--
 	}
 
-	return usia, nil
+	return age, nil
 }
 
 func GetAgeFromProfile(profile Profile) (int, error) {
