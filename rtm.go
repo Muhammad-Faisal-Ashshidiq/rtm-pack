@@ -77,6 +77,7 @@ func DeleteDataUsername(username string, db *mongo.Database, col string) {
 	fmt.Println("Succes Delete data")
 }
 
+//fungsi untuk meng-generate tanggal_lahir menjadi usia
 func KalkulasiUsia(birthDate string) (int, error) {
 	layout := "21/07/2023" // Format tanggal lahir (hari/bulan/tahun)
 	birth, err := time.Parse(layout, birthDate)
