@@ -26,23 +26,22 @@ func InsertOneDoc(db *mongo.Database, collection string, doc interface{}) (inser
 	return insertResult.InsertedID
 }
 
-func InsertDataProfil(db *mongo.Database, username, email, pendidikan, tanggal_lahir, bio string) (insertedID interface{}) {
-	dtProf := Profile{
-		Username:     username,
-		Email:        email,
-		Pendidikan:   pendidikan,
-		Tanggal_lahir: tanggal_lahir,
-		Bio:          bio,
-	}
-	return InsertOneDoc(db, "data_Profile", dtProf)
+func InsertDataProfil(db *mongo.Database, username, email, pendidikan string, tanggal_lahir string, bio string) (InsertedID interface{}) {
+	var dtProf Profil
+	dtProf.Username = username
+	dtProf.Email = email
+	dtProf.Pendidikan = pendidikan
+	dtProf.Tanggal_lahir = bio
+	dtProf.Bio = bio
+	return InsertOneDoc(db, "data_user", dtProf)
 }
 
-func GetDataProfil(Bio string, db *mongo.Database, col string) (data Profile) {
+func GetDataProfil(pendidikan string, db *mongo.Database, col string) (data Profile) {
 	user := db.Collection(col)
-	filter := bson.M{"bio": Bio}
+	filter := bson.M{"pendidikan": pendidikan}
 	err := user.FindOne(context.TODO(), filter).Decode(&data)
 	if err != nil {
-		fmt.Printf("getbybio: %v\n", err)
+		fmt.Printf("getbypendidikan: %v\n", err)
 	}
 	return data
 }
@@ -78,22 +77,22 @@ func DeleteDataUsername(username string, db *mongo.Database, col string) {
 }
 
 //fungsi untuk meng-generate tanggal_lahir menjadi usia
-func KalkulasiUsia(birthDate string) (int, error) {
-	layout := "21/07/2023" // Format tanggal lahir (hari/bulan/tahun)
-	birth, err := time.Parse(layout, birthDate)
+func KalkulasiUsia(Tanggal_lahir string) (int, error) {
+	layout := "02/01/1999" // Format tanggal lahir (hari/bulan/tahun)
+	tglLahir, err := time.Parse(layout, Tanggal_lahir)
 	if err != nil {
 		return 0, err
 	}
 
 	currentDate := time.Now()
-	age := currentDate.Year() - birth.Year()
+	usia := currentDate.Year() - tglLahir.Year()
 
 	// Pengecekan apabila tanggal tahirnya supaya bisa menyesuaikan tahun user
-	if currentDate.YearDay() < birth.YearDay() {
-		age--
+	if currentDate.YearDay() < tglLahir.YearDay() {
+		usia--
 	}
 
-	return age, nil
+	return usia, nil
 }
 
 func GetAgeFromProfile(profile Profile) (int, error) {
