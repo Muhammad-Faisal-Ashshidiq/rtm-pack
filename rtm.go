@@ -56,12 +56,12 @@ func GetDataUsername(username string, db *mongo.Database, col string) (data Prof
 	return data
 }
 
-func DeleteDataProfil(Id_user string, db *mongo.Database, col string) {
+func DeleteDataProfil(Pendidikan string, db *mongo.Database, col string) {
 	user := db.Collection(col)
-	filter := bson.M{"Id_user": Id_user}
+	filter := bson.M{"pendidikan": Pendidikan}
 	_, err := user.DeleteOne(context.TODO(), filter)
 	if err != nil {
-		fmt.Printf("DeleteDataProf : %v\n", err)
+		fmt.Printf("DeleteDataProfile : %v\n", err)
 	}
 	fmt.Println("Succes Delete data Profile")
 }
